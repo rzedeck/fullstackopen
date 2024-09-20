@@ -4,7 +4,7 @@ const Button = ({ handleClick, text }) => (
   <button onClick={handleClick}> {text} </button>
 )
 
-const DisplayStatistics = ({ value, text, units }) => (
+const StatisticLine  = ({ value, text, units }) => (
   <p>{text} {value} {units}</p>
 )
 
@@ -13,12 +13,12 @@ const Statistics = (props) => {
     return (
       <>
         <h1>Statistics</h1>
-        <DisplayStatistics value={props.good} text='Good'/>
-        <DisplayStatistics value={props.neutral} text='Neutral'/>
-        <DisplayStatistics value={props.bad} text='Bad'/>
-        <DisplayStatistics value={props.total} text='All'/>
-        <DisplayStatistics value={props.average} text='Average'/>
-        <DisplayStatistics value={props.positive} text='Positive' units='%'/>
+        <StatisticLine value={props.good} text='Good'/>
+        <StatisticLine value={props.neutral} text='Neutral'/>
+        <StatisticLine value={props.bad} text='Bad'/>
+        <StatisticLine value={props.total} text='All'/>
+        <StatisticLine value={props.average} text='Average'/>
+        <StatisticLine value={props.positive} text='Positive' units='%'/>
       </>
     )
   }else {
@@ -73,9 +73,9 @@ const App = () => {
     }
   }
 
-  const calcAvgReviews = (positiveReveiws, negativeReviews, totalReviews) => {
+  const calcAvgReviews = (positiveReviews, negativeReviews, totalReviews) => {
     if (totalReviews > 0){
-      const calculatedAvgReviews = (positiveReveiws-negativeReviews)/totalReviews
+      const calculatedAvgReviews = (positiveReviews-negativeReviews)/totalReviews
       setAverage(calculatedAvgReviews)
     }
   }
