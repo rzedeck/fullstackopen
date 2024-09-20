@@ -17,6 +17,7 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(new Uint8Array(anecdotes.length))
 
   const handleNextClick = () => {
     //console.log('Votes array ', votes)
@@ -28,9 +29,17 @@ const App = () => {
     }
   }
 
+  const handleVoteClick = () => {
+    const pointsCopy = [...votes]
+    pointsCopy[selected] += 1
+    setVotes(pointsCopy)
+  }
+
   return (
     <div>
       <p>{anecdotes[selected]}</p>
+      <p>has {votes[selected]} votes</p>
+      <Button handleClick={handleVoteClick} text='Vote' />
       <Button handleClick={handleNextClick} text='Next Anedocte' />
     </div>
   )
