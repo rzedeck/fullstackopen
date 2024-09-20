@@ -9,18 +9,27 @@ const DisplayStatistics = ({ value, text, units }) => (
 )
 
 const Statistics = (props) => {
-
-  return (
-    <>
-      <h1>Statistics</h1>
-      <DisplayStatistics value={props.good} text='Good'/>
-      <DisplayStatistics value={props.neutral} text='Neutral'/>
-      <DisplayStatistics value={props.bad} text='Bad'/>
-      <DisplayStatistics value={props.total} text='All'/>
-      <DisplayStatistics value={props.average} text='Average'/>
-      <DisplayStatistics value={props.positive} text='Positive' units='%'/>
-    </>
-  )
+  if (props.total > 0){
+    return (
+      <>
+        <h1>Statistics</h1>
+        <DisplayStatistics value={props.good} text='Good'/>
+        <DisplayStatistics value={props.neutral} text='Neutral'/>
+        <DisplayStatistics value={props.bad} text='Bad'/>
+        <DisplayStatistics value={props.total} text='All'/>
+        <DisplayStatistics value={props.average} text='Average'/>
+        <DisplayStatistics value={props.positive} text='Positive' units='%'/>
+      </>
+    )
+  }else {
+    return (
+      <>
+        <h1>Statistics</h1>
+        <p>No feedback given</p>
+      </>
+    )
+  }
+  
 }
 
 const App = () => {
