@@ -27,12 +27,22 @@ const App = () => {
     }
     
     if(persons.every(person => person.name !== contactObject.name)){
-      setPersons(persons.concat(contactObject))
-      setNewName('')
-      setNewNumber('')
+      axios
+      .post('http://localhost:3001/persons', contactObject)
+      .then(response => {
+        console.log(response)
+        //setPersons(persons.concat(contactObject))
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNumber('')
+      })
+
+
     }else{
       alert(`${contactObject.name} is already added to phonebook`)
     }
+
+
 
   }
 
@@ -47,7 +57,7 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
       <ContactFilter handler={handleFilterChange} />
-      <AddContact addContact={addContact} handlerName={handleNameChange} HandlerNumber={handleNumberChange} />
+      <AddContact addContact={addContact} handlerName={handleNameChange} handlerNumber={handleNumberChange} newName={newName} newNumber={newNumber} />
       <ContactList contacts={filteredContacts} />
     </div>
   )
