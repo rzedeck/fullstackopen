@@ -34,7 +34,16 @@ const App = () => {
         setNewNumber('')
       })
     }else{
-      alert(`${contactObject.name} is already added to phonebook`)
+      if (window.confirm(`${contactObject.name} is already added to phonebook, replace the old number with the new one ?`)) {
+        const contacUpdateObj = persons.find(person => person.name === contactObject.name)
+        noteService
+        .update(contacUpdateObj.id, contactObject)
+        .then(updatedContact => {
+          setPersons(persons.map(person => person.id !== updatedContact.id ? person : updatedContact))
+          setNewName('')
+          setNewNumber('')
+        })
+      }
     }
   }
 
