@@ -21,7 +21,6 @@ const App = () => {
   const addContact = (event) => {
     event.preventDefault()
     const contactObject = {
-      id: String(persons.length + 1),
       name: newName,
       number: newNumber
     }
@@ -39,6 +38,16 @@ const App = () => {
     }
   }
 
+  const handleEraseContact = (contact) => {
+    if (window.confirm(`Do you really want to delete ${contact.name}?`)) {
+      noteService
+      .erase(contact.id)
+      .then(erasedContact => {
+        setPersons(persons.filter(person => person.id !== erasedContact.id))
+      })
+    }
+  }
+
   const handleNameChange = (event) => setNewName(event.target.value)
   const handleNumberChange = (event) => setNewNumber(event.target.value)
   const handleFilterChange = (event) => setNewFilter(event.target.value)
@@ -51,7 +60,7 @@ const App = () => {
       <h1>Phonebook</h1>
       <ContactFilter handler={handleFilterChange} />
       <AddContact addContact={addContact} handlerName={handleNameChange} handlerNumber={handleNumberChange} newName={newName} newNumber={newNumber} />
-      <ContactList contacts={filteredContacts} />
+      <ContactList contacts={filteredContacts} handlerErase={handleEraseContact}/>
     </div>
   )
 }

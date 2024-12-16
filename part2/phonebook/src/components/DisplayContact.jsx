@@ -1,5 +1,5 @@
-const DisplayContact = ({ contact }) => {
-    return <p>{contact.name} {contact.number}</p>
+const DisplayContact = ({ contact, erase }) => {
+    return <p>{contact.name} {contact.number} <button onClick={() => erase(contact)}>Delete</button> </p>
   }
 
   export default DisplayContact
