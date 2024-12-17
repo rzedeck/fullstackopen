@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import ContactFilter from './components/ContactFilter'
 import ContactList from './components/ContactList'
 import AddContact from './components/AddContact'
+import Notification from './components/Notification'
 import noteService from './services/notes'
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [userNotification, setUserNotification] = useState(null)
 
   useEffect(() => {
     noteService
@@ -32,6 +34,10 @@ const App = () => {
         setPersons(persons.concat(returnedContact))
         setNewName('')
         setNewNumber('')
+        setUserNotification(`Added ${returnedContact.name}`)
+        setTimeout(() => {
+          setUserNotification(null)
+        }, 5000)
       })
     }else{
       if (window.confirm(`${contactObject.name} is already added to phonebook, replace the old number with the new one ?`)) {
@@ -42,6 +48,10 @@ const App = () => {
           setPersons(persons.map(person => person.id !== updatedContact.id ? person : updatedContact))
           setNewName('')
           setNewNumber('')
+          setUserNotification(`Changed ${updatedContact.name}`)
+          setTimeout(() => {
+            setUserNotification(null)
+          }, 5000)
         })
       }
     }
@@ -64,9 +74,12 @@ const App = () => {
   const filteredContacts = 
   persons.filter(person => person.name.toLocaleLowerCase().includes(newFilter.toLowerCase()))
 
+  console.log('user notif', userNotification)
+
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification notification={userNotification}/>
       <ContactFilter handler={handleFilterChange} />
       <AddContact addContact={addContact} handlerName={handleNameChange} handlerNumber={handleNumberChange} newName={newName} newNumber={newNumber} />
       <ContactList contacts={filteredContacts} handlerErase={handleEraseContact}/>
