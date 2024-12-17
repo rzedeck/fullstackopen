@@ -11,6 +11,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
   const [userNotification, setUserNotification] = useState(null)
+  const [notifType, setNotifType] = useState('')
 
   useEffect(() => {
     noteService
@@ -35,6 +36,7 @@ const App = () => {
         setNewName('')
         setNewNumber('')
         setUserNotification(`Added ${returnedContact.name}`)
+        setNotifType('success')
         setTimeout(() => {
           setUserNotification(null)
         }, 5000)
@@ -49,9 +51,19 @@ const App = () => {
           setNewName('')
           setNewNumber('')
           setUserNotification(`Changed ${updatedContact.name}`)
+          setNotifType('success')
           setTimeout(() => {
             setUserNotification(null)
           }, 5000)
+        })
+        .catch(error => {
+          setUserNotification(`Contact '${contactObject.name}' was already removed from server`)
+          setNotifType('error')
+          setTimeout(() => {
+            setUserNotification(null)
+          }, 5000)
+          console.log('error:',error)
+          setPersons(persons.filter(p =>p.name !== contactObject.name))
         })
       }
     }
@@ -79,7 +91,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification notification={userNotification}/>
+      <Notification notification={userNotification} type={notifType}/>
       <ContactFilter handler={handleFilterChange} />
       <AddContact addContact={addContact} handlerName={handleNameChange} handlerNumber={handleNumberChange} newName={newName} newNumber={newNumber} />
       <ContactList contacts={filteredContacts} handlerErase={handleEraseContact}/>
