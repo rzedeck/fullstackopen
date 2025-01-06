@@ -1,8 +1,7 @@
 import DisplayCountryFlag from "./DisplayCountryFlag"
 
-const DisplayCountries = ({ countries }) => {
+const DisplayCountries = ({ countries, handleClick }) => {
     if(countries){
-      console.log('countries length', countries.length)
       if(countries.length === 0){
         return <p>No counties searched. Please type a country name</p>
       }
@@ -15,17 +14,15 @@ const DisplayCountries = ({ countries }) => {
         return (
           <>
             {countries.map(country => (
-              <p key={country.name.common}>{country.name.common}</p>
+              <p key={country.name.common}>{country.name.common}<button key={country.name.common} onClick={() => handleClick(country.name.common)}>Show Info</button></p>
             ))}
           </>
         )
       }
       
       const [singleCountry] = countries 
-      console.log('single country:', singleCountry)
       
       const languages = Object.values(singleCountry.languages)
-      console.log('single country languages:', languages)
       return (
         <>
           <h1>{singleCountry.name.common}</h1>

@@ -12,7 +12,6 @@ function App() {
 
   // Fetch all countries initially
   useEffect(() => {
-    console.log('Fetching country list...')
     axios
       .get('https://studies.cs.helsinki.fi/restcountries/api/all')
       .then(response => {
@@ -30,14 +29,14 @@ function App() {
    const filter = newFilter.toLowerCase()
    const timeoutId = setTimeout(() => {
     if (filter === '') {
-      setFilteredCountries([]);
+      setFilteredCountries([])
     } else {
       const filtered = allCountriesList.filter(country =>
         country.name.common.toLowerCase().includes(filter)
       );
-      setFilteredCountries(filtered);
+      setFilteredCountries(filtered)
     }
-  }, inputDelay);
+  }, inputDelay)
 
     return () => clearTimeout(timeoutId)
   }, [newFilter, allCountriesList])
@@ -58,11 +57,12 @@ function App() {
   }, [filteredCountries])*/
 
   const handleFilterChange = (event) => setNewFilter(event.target.value)
+  const handleShowInfoClick = (countryName) => setNewFilter(countryName)
 
   return (
     <>
       <CountryFilter handler={handleFilterChange} />
-      <DisplayCountries countries={filteredCountries} />
+      <DisplayCountries countries={filteredCountries} handleClick={handleShowInfoClick}/>
     </>
   )
 }
