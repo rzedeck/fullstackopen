@@ -5,13 +5,16 @@ import axios from 'axios'
 
 function App() {
   const [newFilter, setNewFilter] = useState('')
+  const [weatherIcon, setWeatherIcon] = useState('')
+  const [weather, setWeather] = useState({})
   const [allCountriesList, setAllCountriesList] = useState([])
   const [filteredCountries, setFilteredCountries] = useState([])
-
+  const api_key = import.meta.env.VITE_W_API_KEY
   const inputDelay = 500
 
   // Fetch all countries initially
   useEffect(() => {
+    //todo service
     axios
       .get('https://studies.cs.helsinki.fi/restcountries/api/all')
       .then(response => {
@@ -40,21 +43,29 @@ function App() {
 
     return () => clearTimeout(timeoutId)
   }, [newFilter, allCountriesList])
-/*
-  // Handle precise single-country fetch
+
+  // Handle capital weather report fetch
   useEffect(() => {
     if (filteredCountries.length === 1) {
-      const [singleCountry] = filteredCountries
+      const [{ capitalInfo: { latlng: [lat, lon] } }] = filteredCountries
       axios
-        .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${singleCountry.name.official}`)
+        .get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`)
         .then(response => {
-          console.log('Single Country data:', response.data)
+          setWeather(response.data)
         })
         .catch(error => {
           console.error('Error fetching single country data:', error)
         })
     }
-  }, [filteredCountries])*/
+  }, [filteredCountries, api_key])
+
+  //todo check the condition !==0
+  useEffect(() => {
+    if (Object.keys(weather).length !== 0){
+      const [{ icon }] = weather.weather 
+      setWeatherIcon(`https://openweathermap.org/img/wn/${icon}@2x.png`)
+    }
+  }, [weather])
 
   const handleFilterChange = (event) => setNewFilter(event.target.value)
   const handleShowInfoClick = (countryName) => setNewFilter(countryName)
@@ -62,7 +73,7 @@ function App() {
   return (
     <>
       <CountryFilter handler={handleFilterChange} />
-      <DisplayCountries countries={filteredCountries} handleClick={handleShowInfoClick}/>
+      <DisplayCountries countries={filteredCountries} weather={weather} weatherIcon={weatherIcon} handleClick={handleShowInfoClick}/>
     </>
   )
 }

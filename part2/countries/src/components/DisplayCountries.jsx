@@ -1,6 +1,7 @@
 import DisplayCountryFlag from "./DisplayCountryFlag"
+import DisplayWeather from "./DisplayWeather"
 
-const DisplayCountries = ({ countries, handleClick }) => {
+const DisplayCountries = ({ countries, weather, weatherIcon, handleClick }) => {
     if(countries){
       if(countries.length === 0){
         return <p>No counties searched. Please type a country name</p>
@@ -21,17 +22,19 @@ const DisplayCountries = ({ countries, handleClick }) => {
       }
       
       const [singleCountry] = countries 
-      
       const languages = Object.values(singleCountry.languages)
+
       return (
         <>
           <h1>{singleCountry.name.common}</h1>
           <p>Capital: {singleCountry.capital}</p>
-          <p>Population: {singleCountry.population}</p>
+          <p>Area: {singleCountry.area}</p>
+          <h2>Languages</h2>
           <ul>
             {languages.map((language) => (<li key={language}>{language}</li>))}
           </ul>
           <DisplayCountryFlag png={singleCountry.flags.png} alt={singleCountry.flags.alt}/>
+          <DisplayWeather cityName={singleCountry.capital} weather={weather} icon={weatherIcon}/>
         </>
       )
     }
