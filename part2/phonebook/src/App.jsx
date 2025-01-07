@@ -86,8 +86,6 @@ const App = () => {
   const filteredContacts = 
   persons.filter(person => person.name.toLocaleLowerCase().includes(newFilter.toLowerCase()))
 
-  console.log('user notif', userNotification)
-
   return (
     <div>
       <h1>Phonebook</h1>
