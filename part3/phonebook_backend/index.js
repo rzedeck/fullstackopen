@@ -1,9 +1,12 @@
 const express = require('express')
 const app = express()
-var morgan = require('morgan')
+const morgan = require('morgan')
 
 app.use(express.json())
-app.use(morgan('tiny'))
+
+morgan.token('body', (req) => (req.method === 'POST' ? JSON.stringify(req.body) : ''))
+
+app.use(morgan(':method :url :status :response-time ms - :res[content-length] - :body'))
 
 let persons = [
   {
@@ -34,6 +37,7 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
+  //console.log(request)
   response.json(persons)
 })
 
@@ -72,8 +76,11 @@ app.post('/api/persons', (request, response) => {
 
   persons = persons.concat(person)
   
+  
   response.json(body)
+  
 })
+
 
 app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id
