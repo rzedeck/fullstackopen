@@ -1,12 +1,15 @@
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
+const cors = require('cors')
 
 app.use(express.json())
 
 morgan.token('body', (req) => (req.method === 'POST' ? JSON.stringify(req.body) : ''))
 
 app.use(morgan(':method :url :status :response-time ms - :res[content-length] - :body'))
+
+app.use(cors())
 
 let persons = [
   {
@@ -71,16 +74,13 @@ app.post('/api/persons', (request, response) => {
     id:  Math.floor(Math.random() * 10000000000000).toString(),
     name: body.name,
     number: body.number
-    
   }
 
   persons = persons.concat(person)
   
-  
-  response.json(body)
+  response.json(person)
   
 })
-
 
 app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id
