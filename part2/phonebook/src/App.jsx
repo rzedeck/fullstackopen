@@ -70,12 +70,19 @@ const App = () => {
   }
 
   const handleEraseContact = (contact) => {
+    console.log('Contact', contact)
     if (window.confirm(`Do you really want to delete ${contact.name}?`)) {
       personService
       .erase(contact.id)
-      .then(erasedContact => {
-        setPersons(persons.filter(person => person.id !== erasedContact.id))
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== contact.id))
+        setUserNotification(`Erased ${contact.name}`)
+        setNotifType('success')
+        setTimeout(() => {
+          setUserNotification(null) 
+        }, 5000)
       })
+      console.log('Person State', persons)
     }
   }
 
