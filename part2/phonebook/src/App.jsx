@@ -41,6 +41,15 @@ const App = () => {
           setUserNotification(null)
         }, 5000)
       })
+      .catch(error => {
+        console.log('<<<<<Error>>>>>:',error)
+        setUserNotification(error.response.data.error)
+        setNotifType('error')
+        setTimeout(() => {
+          setUserNotification(null)
+        }, 5000)
+        
+      })
     }else{
       if (window.confirm(`${contactObject.name} is already added to phonebook, replace the old number with the new one ?`)) {
         const contacUpdateObj = persons.find(person => person.name === contactObject.name)
@@ -70,7 +79,6 @@ const App = () => {
   }
 
   const handleEraseContact = (contact) => {
-    console.log('Contact', contact)
     if (window.confirm(`Do you really want to delete ${contact.name}?`)) {
       personService
       .erase(contact.id)
