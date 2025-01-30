@@ -3,7 +3,7 @@ import ContactFilter from './components/ContactFilter'
 import ContactList from './components/ContactList'
 import AddContact from './components/AddContact'
 import Notification from './components/Notification'
-import noteService from './services/notes'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -14,7 +14,7 @@ const App = () => {
   const [notifType, setNotifType] = useState('')
 
   useEffect(() => {
-    noteService
+    personService
     .getAll()
     .then(initialContacts => {
       setPersons(initialContacts)
@@ -29,7 +29,7 @@ const App = () => {
     }
     
     if(persons.every(person => person.name !== contactObject.name)){
-      noteService
+      personService
       .create(contactObject)
       .then(returnedContact => {
         setPersons(persons.concat(returnedContact))
@@ -41,10 +41,19 @@ const App = () => {
           setUserNotification(null)
         }, 5000)
       })
+      .catch(error => {
+        console.log('<<<<<Error>>>>>:',error)
+        setUserNotification(error.response.data.error)
+        setNotifType('error')
+        setTimeout(() => {
+          setUserNotification(null)
+        }, 5000)
+        
+      })
     }else{
       if (window.confirm(`${contactObject.name} is already added to phonebook, replace the old number with the new one ?`)) {
         const contacUpdateObj = persons.find(person => person.name === contactObject.name)
-        noteService
+        personService
         .update(contacUpdateObj.id, contactObject)
         .then(updatedContact => {
           setPersons(persons.map(person => person.id !== updatedContact.id ? person : updatedContact))
@@ -71,11 +80,17 @@ const App = () => {
 
   const handleEraseContact = (contact) => {
     if (window.confirm(`Do you really want to delete ${contact.name}?`)) {
-      noteService
+      personService
       .erase(contact.id)
-      .then(erasedContact => {
-        setPersons(persons.filter(person => person.id !== erasedContact.id))
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== contact.id))
+        setUserNotification(`Erased ${contact.name}`)
+        setNotifType('success')
+        setTimeout(() => {
+          setUserNotification(null) 
+        }, 5000)
       })
+      console.log('Person State', persons)
     }
   }
 
