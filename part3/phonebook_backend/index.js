@@ -16,7 +16,7 @@ app.use(cors())
 
 app.get('/', (request, response) => {
   const reqDate = new Date().toString()
-  response.send(`<p>Pronebook has info for ${persons.length} people <br/> ${reqDate}</p>`)
+  response.send(`<p>Phonebook has info for ${Person.length} people <br/> ${reqDate}</p>`)
 })
 
 app.get('/api/persons', (request, response) => {
@@ -25,16 +25,17 @@ app.get('/api/persons', (request, response) => {
   })
 })
 
+
 app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
-  .then(person => {
-    if (person){
-      response.json(person)
-    }else {
-      response.status(404).end() 
-    }
-  })
-  .catch(error => next(error))
+    .then(person => {
+      if (person){
+        response.json(person)
+      }else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response, next) => {
@@ -56,17 +57,17 @@ app.post('/api/persons', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
-  const {name, number} = request.body
+  const { name, number } = request.body
 
-  Person.findByIdAndUpdate(request.params.id, 
-    {name, number}, 
+  Person.findByIdAndUpdate(request.params.id,
+    { name, number },
     { new: true, runValidators: true, context: 'query' }
   )
     .then(updatedContact => {
